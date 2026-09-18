@@ -1,0 +1,55 @@
+services:
+  # Backend API + Realtime WebSockets
+  - type: web
+    name: medicore-backend
+    runtime: node
+    rootDir: MediCore/backend
+    plan: free
+    buildCommand: npm install && npx prisma generate && npx prisma migrate deploy && node prisma/seed.js
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: medicore-database
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: AI_SERVICE_ENABLED
+        value: "false"
+      - key: FRONTEND_URL
+        value: "*"
+      - key: SOCKET_CORS_ORIGIN
+        value: "*"
+
+  # Frontend React SPA
+  - type: web
+    name: medicore-frontend
+    runtime: static
+    rootDir: MediCore/frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: medicore-backend
+          envVarKey: RENDER_EXTERNAL_URL
+          valueModifier: append /api
+      - key: VITE_SOCKET_URL
+        fromService:
+          type: web
+          name: medicore-backend
+          envVarKey: RENDER_EXTERNAL_URL
+
+databases:
+  # Managed PostgreSQL Database
+  - name: medicore-database
+    plan: free
+    databaseName: medicore
+    user: medicore

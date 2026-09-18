@@ -4,7 +4,7 @@ require('dotenv').config();
 const list = (value, fallback) =>
   String(value || fallback)
     .split(',')
-    .map((entry) => entry.trim())
+    .map((entry) => entry.trim().replace(/\/+$/, ''))
     .filter(Boolean);
 
 const env = {
