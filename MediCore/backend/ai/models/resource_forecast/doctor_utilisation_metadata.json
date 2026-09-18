@@ -1,0 +1,182 @@
+{
+  "model_name": "resource_utilisation_doctor",
+  "model_key": "doctor_utilisation",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "resource_forecast",
+  "target": "target_doctor_utilisation_1h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:37.347086+00:00",
+  "training_rows": 3021,
+  "validation_rows": 647,
+  "test_rows": 648,
+  "baseline_column": "doctor_utilisation",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 2.3873,
+      "rmse": 3.6469,
+      "r2": 0.8774,
+      "mape": 2.772,
+      "bias": -0.2403,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -8.284387463378906,
+        "upper_offset": 4.7759248291015615,
+        "residual_std": 3.6389749895897037
+      }
+    },
+    "test": {
+      "mae": 2.8165,
+      "rmse": 4.0266,
+      "r2": 0.8267,
+      "mape": 3.211,
+      "bias": -0.1099,
+      "samples": 648,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -8.006324386596681,
+        "upper_offset": 5.119907736206053,
+        "residual_std": 4.0251044084727
+      },
+      "skill_vs_baseline": 0.4016,
+      "skill_baseline": "persistence (doctor_utilisation)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 4.2814,
+        "rmse": 7.9379,
+        "r2": 0.4192,
+        "mape": 5.109,
+        "bias": -0.1472,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -13.1919,
+          "upper_offset": 12.288099999999996,
+          "residual_std": 7.936508661436036
+        }
+      },
+      "test": {
+        "mae": 4.7066,
+        "rmse": 7.8546,
+        "r2": 0.3404,
+        "mape": 5.476,
+        "bias": 0.0,
+        "samples": 648,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -12.069550000000001,
+          "upper_offset": 13.024899999999997,
+          "residual_std": 7.854642974259646
+        }
+      },
+      "column": "doctor_utilisation"
+    },
+    "best_iteration": 59,
+    "trees": 90,
+    "feature_importance": [
+      {
+        "feature": "nurse_utilisation",
+        "label": "nurse utilisation",
+        "share": 0.3164
+      },
+      {
+        "feature": "hour_sin",
+        "label": "daily cycle (rising/falling phase)",
+        "share": 0.1572
+      },
+      {
+        "feature": "hour_cos",
+        "label": "daily cycle (peak/trough phase)",
+        "share": 0.1078
+      },
+      {
+        "feature": "doctor_utilisation",
+        "label": "doctor utilisation",
+        "share": 0.1052
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0651
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.0495
+      },
+      {
+        "feature": "arrivals_6h",
+        "label": "emergency arrivals in the last 6 hours",
+        "share": 0.04
+      },
+      {
+        "feature": "occupied_icu",
+        "label": "occupied icu",
+        "share": 0.0167
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.0153
+      },
+      {
+        "feature": "admissions_rate_1h",
+        "label": "admissions in the last hour",
+        "share": 0.0149
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/resource_forecast/doctor_utilisation_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "doctor utilisation over the next 1 hour"
+}

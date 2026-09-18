@@ -1,0 +1,608 @@
+{
+  "library_version": "synthetic_hospital_ops_v1",
+  "synthetic": true,
+  "synthetic_warning": "SYNTHETIC DATA. Stress scenarios generated for model training and evaluation. Not real hospital activity.",
+  "seed": 20260918,
+  "generated_at": "2026-09-18T13:22:27.915145+00:00",
+  "scenarios": {
+    "normal": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 6.2,
+        "surge_probability": 0.0,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/normal.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 63.91,
+        "pressure_index_max": 74.45,
+        "peak_queue": 2.23,
+        "peak_bed_occupancy": 86.72,
+        "peak_icu_occupancy": 90.69,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 49.06,
+        "peak_ot_backlog": 5.68,
+        "total_arrivals": 969.0
+      },
+      "band_share": {
+        "NORMAL": 0.9392,
+        "MODERATE": 0.0608,
+        "HIGH": 0.0,
+        "CRITICAL": 0.0
+      }
+    },
+    "busy": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 8.4,
+        "surge_probability": 0.06,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/busy.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 67.56,
+        "pressure_index_max": 93.36,
+        "peak_queue": 21.85,
+        "peak_bed_occupancy": 92.28,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 68.74,
+        "peak_ot_backlog": 8.51,
+        "total_arrivals": 1415.0
+      },
+      "band_share": {
+        "NORMAL": 0.7153,
+        "MODERATE": 0.2604,
+        "HIGH": 0.0243,
+        "CRITICAL": 0.0
+      }
+    },
+    "high_demand": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 10.2,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/high_demand.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 70.71,
+        "pressure_index_max": 95.96,
+        "peak_queue": 42.26,
+        "peak_bed_occupancy": 92.63,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 79.29,
+        "peak_ot_backlog": 15.57,
+        "total_arrivals": 1681.0
+      },
+      "band_share": {
+        "NORMAL": 0.5139,
+        "MODERATE": 0.4271,
+        "HIGH": 0.0451,
+        "CRITICAL": 0.0139
+      }
+    },
+    "sudden_surge": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 8.0,
+        "surge_probability": 0.22,
+        "surge_size": 38,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          2
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/sudden_surge.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 76.32,
+        "pressure_index_max": 96.97,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.7,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 84.94,
+        "peak_ot_backlog": 43.95,
+        "total_arrivals": 1789.0
+      },
+      "band_share": {
+        "NORMAL": 0.4132,
+        "MODERATE": 0.276,
+        "HIGH": 0.2135,
+        "CRITICAL": 0.0972
+      }
+    },
+    "icu_bottleneck": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 8,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 9.2,
+        "surge_probability": 0.12,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          3
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/icu_bottleneck.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 72.51,
+        "pressure_index_max": 96.57,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.44,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 80.37,
+        "peak_ot_backlog": 26.83,
+        "total_arrivals": 1693.0
+      },
+      "band_share": {
+        "NORMAL": 0.5156,
+        "MODERATE": 0.3403,
+        "HIGH": 0.1042,
+        "CRITICAL": 0.0399
+      }
+    },
+    "bed_shortage": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 62,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 9.0,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          2
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/bed_shortage.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 70.88,
+        "pressure_index_max": 96.77,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 95.5,
+        "peak_icu_occupancy": 99.18,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 85.07,
+        "peak_ot_backlog": 25.66,
+        "total_arrivals": 1595.0
+      },
+      "band_share": {
+        "NORMAL": 0.5885,
+        "MODERATE": 0.2396,
+        "HIGH": 0.1424,
+        "CRITICAL": 0.0295
+      }
+    },
+    "doctor_shortage": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 18,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 8.8,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          3
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/doctor_shortage.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 73.09,
+        "pressure_index_max": 96.68,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.69,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 82.31,
+        "peak_ot_backlog": 26.67,
+        "total_arrivals": 1642.0
+      },
+      "band_share": {
+        "NORMAL": 0.4497,
+        "MODERATE": 0.4097,
+        "HIGH": 0.0903,
+        "CRITICAL": 0.0503
+      }
+    },
+    "nurse_shortage": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 44,
+        "operating_theatres": 4,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 8.8,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          3
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/nurse_shortage.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 73.51,
+        "pressure_index_max": 96.68,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.69,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 82.31,
+        "peak_ot_backlog": 26.67,
+        "total_arrivals": 1642.0
+      },
+      "band_share": {
+        "NORMAL": 0.3993,
+        "MODERATE": 0.4601,
+        "HIGH": 0.0885,
+        "CRITICAL": 0.0521
+      }
+    },
+    "equipment_shortage": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 4,
+        "ventilators": 9,
+        "monitors": 7,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 9.0,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          2
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/equipment_shortage.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 74.42,
+        "pressure_index_max": 98.3,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.77,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 100.0,
+        "peak_ot_backlog": 25.66,
+        "total_arrivals": 1595.0
+      },
+      "band_share": {
+        "NORMAL": 0.349,
+        "MODERATE": 0.5122,
+        "HIGH": 0.0243,
+        "CRITICAL": 0.1146
+      }
+    },
+    "ot_conflict": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 100,
+        "icu_beds": 10,
+        "doctors": 30,
+        "nurses": 72,
+        "operating_theatres": 2,
+        "ventilators": 15,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 8.6,
+        "surge_probability": 0.1,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          3
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/ot_conflict.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 72.73,
+        "pressure_index_max": 96.67,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 92.59,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 81.08,
+        "peak_ot_backlog": 90.0,
+        "total_arrivals": 1575.0
+      },
+      "band_share": {
+        "NORMAL": 0.4479,
+        "MODERATE": 0.4167,
+        "HIGH": 0.1042,
+        "CRITICAL": 0.0312
+      }
+    },
+    "multiple_simultaneous_constraints": {
+      "config": {
+        "days": 6,
+        "seed": 20260918,
+        "start": "2026-06-01T00:00:00+00:00",
+        "beds": 74,
+        "icu_beds": 8,
+        "doctors": 20,
+        "nurses": 50,
+        "operating_theatres": 2,
+        "ventilators": 10,
+        "monitors": 12,
+        "emergency_bays": 10,
+        "base_arrivals_per_hour": 9.8,
+        "surge_probability": 0.16,
+        "surge_size": 24,
+        "surge_min_hours": 2,
+        "surge_max_hours": 5,
+        "elective_procedures_per_day": 14,
+        "critical_share": 0.09,
+        "high_share": 0.24,
+        "medium_share": 0.38,
+        "doctor_hours_per_day": 14.0,
+        "nurse_hours_per_day": 20.0,
+        "holidays": [
+          "2026-06-15",
+          "2026-07-04"
+        ],
+        "major_surge_days": [
+          2
+        ],
+        "major_surge_size": 38,
+        "major_surge_hours": 5
+      },
+      "file": "/home/user/MediCore/backend/ai/data/synthetic/scenario_library/multiple_simultaneous_constraints.csv",
+      "rows": 576,
+      "observed": {
+        "pressure_index_mean": 84.06,
+        "pressure_index_max": 98.32,
+        "peak_queue": 60.0,
+        "peak_bed_occupancy": 93.9,
+        "peak_icu_occupancy": 100.0,
+        "peak_nurse_utilisation": 100.0,
+        "peak_doctor_utilisation": 100.0,
+        "peak_equipment_utilisation": 98.03,
+        "peak_ot_backlog": 90.0,
+        "total_arrivals": 1909.0
+      },
+      "band_share": {
+        "NORMAL": 0.1302,
+        "MODERATE": 0.3785,
+        "HIGH": 0.2309,
+        "CRITICAL": 0.2604
+      }
+    }
+  }
+}

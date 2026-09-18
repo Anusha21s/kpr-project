@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Production / Build outputs
+dist/
+**/dist/
+build/
+**/build/
+
+# Environment files
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs and coverage
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+coverage/
+
+# Database data and portable binaries
+pgsql/data/
+pgsql/pgsql/
+pgsql/*.log
+
+# System and Cache
+.config/
+.sudo_as_admin_successful
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

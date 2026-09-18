@@ -1,0 +1,317 @@
+{
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "generated_at": "2026-09-18T13:22:33.792538+00:00",
+  "synthetic_source": "ai/data/synthetic_generator.py",
+  "leakage_policy": "chronological split only; features describe time t, every target is a future value",
+  "tables": {
+    "timeline": {
+      "rows": 4320,
+      "path": "/home/user/MediCore/backend/ai/data/features/timeline_features_v2.csv"
+    },
+    "demand": {
+      "rows": 4296,
+      "features": [
+        "current_queue",
+        "critical_queue",
+        "priority_mix_critical",
+        "arrivals_15m",
+        "arrivals_30m",
+        "arrivals_1h",
+        "arrivals_3h",
+        "arrivals_6h",
+        "arrivals_24h",
+        "arrival_rate_trend",
+        "queue_change_15m",
+        "queue_change_30m",
+        "queue_change_1h",
+        "rolling_queue_mean",
+        "rolling_queue_max",
+        "hour_of_day",
+        "hour_sin",
+        "hour_cos",
+        "day_of_week",
+        "is_weekend",
+        "is_holiday",
+        "bed_occupancy",
+        "icu_occupancy",
+        "available_beds",
+        "available_icu",
+        "doctor_utilisation",
+        "nurse_utilisation",
+        "equipment_utilisation",
+        "ot_utilisation",
+        "available_doctors",
+        "available_nurses"
+      ],
+      "targets": {
+        "arrivals_1h": "target_arrivals_1h",
+        "arrivals_2h": "target_arrivals_2h",
+        "queue_1h": "target_queue_1h",
+        "queue_2h": "target_queue_2h"
+      },
+      "split": {
+        "train_rows": 3007,
+        "validation_rows": 644,
+        "test_rows": 645,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T17:45:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/demand_features_v2.csv"
+    },
+    "resource": {
+      "rows": 4296,
+      "features": [
+        "bed_occupancy",
+        "icu_occupancy",
+        "available_beds",
+        "available_icu",
+        "occupied_beds",
+        "occupied_icu",
+        "doctor_utilisation",
+        "nurse_utilisation",
+        "equipment_utilisation",
+        "ot_utilisation",
+        "ot_backlog",
+        "ot_backlog_change_1h",
+        "emergency_resource_pressure",
+        "current_queue",
+        "critical_queue",
+        "arrivals_1h",
+        "arrivals_3h",
+        "arrivals_6h",
+        "admissions_rate_1h",
+        "discharge_rate_1h",
+        "available_doctors",
+        "available_nurses",
+        "queue_change_1h",
+        "rolling_queue_mean",
+        "hour_of_day",
+        "hour_sin",
+        "hour_cos",
+        "day_of_week",
+        "is_weekend",
+        "is_holiday"
+      ],
+      "targets": {
+        "bed_occupancy": "target_bed_occupancy_1h",
+        "icu_occupancy": "target_icu_occupancy_1h",
+        "doctor_utilisation": "target_doctor_utilisation_1h",
+        "nurse_utilisation": "target_nurse_utilisation_1h",
+        "equipment_utilisation": "target_equipment_utilisation_1h",
+        "ot_utilisation": "target_ot_utilisation_1h",
+        "bed_occupancy_2h": "target_bed_occupancy_2h",
+        "icu_occupancy_2h": "target_icu_occupancy_2h"
+      },
+      "split": {
+        "train_rows": 3007,
+        "validation_rows": 644,
+        "test_rows": 645,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T17:45:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/resource_features_v2.csv"
+    },
+    "flow": {
+      "rows": 4296,
+      "features": [
+        "bed_occupancy",
+        "icu_occupancy",
+        "available_beds",
+        "available_icu",
+        "occupied_beds",
+        "occupied_icu",
+        "doctor_utilisation",
+        "nurse_utilisation",
+        "equipment_utilisation",
+        "ot_utilisation",
+        "ot_backlog",
+        "ot_backlog_change_1h",
+        "emergency_resource_pressure",
+        "current_queue",
+        "critical_queue",
+        "arrivals_1h",
+        "arrivals_3h",
+        "arrivals_6h",
+        "admissions_rate_1h",
+        "discharge_rate_1h",
+        "available_doctors",
+        "available_nurses",
+        "queue_change_1h",
+        "rolling_queue_mean",
+        "hour_of_day",
+        "hour_sin",
+        "hour_cos",
+        "day_of_week",
+        "is_weekend",
+        "is_holiday",
+        "queue_change_30m",
+        "rolling_queue_max"
+      ],
+      "targets": {
+        "admissions_6h": "target_admissions_6h",
+        "discharges_6h": "target_discharges_6h",
+        "icu_occupancy_6h": "target_icu_occupancy_6h",
+        "bed_occupancy_6h": "target_bed_occupancy_6h",
+        "ot_backlog_6h": "target_ot_backlog_6h"
+      },
+      "split": {
+        "train_rows": 3007,
+        "validation_rows": 644,
+        "test_rows": 645,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T17:45:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/flow_features_v2.csv"
+    },
+    "anomaly": {
+      "rows": 4296,
+      "features": [
+        "arrivals_15m",
+        "arrivals_1h",
+        "arrivals_3h",
+        "current_queue",
+        "critical_queue",
+        "icu_occupancy",
+        "bed_occupancy",
+        "doctor_utilisation",
+        "nurse_utilisation",
+        "equipment_utilisation",
+        "ot_utilisation",
+        "ot_backlog",
+        "emergency_resource_pressure"
+      ],
+      "targets": {},
+      "split": {
+        "train_rows": 3007,
+        "validation_rows": 644,
+        "test_rows": 645,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T17:45:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/anomaly_features_v2.csv"
+    },
+    "pressure": {
+      "rows": 4296,
+      "features": [
+        "bed_occupancy",
+        "icu_occupancy",
+        "current_queue",
+        "critical_queue",
+        "doctor_utilisation",
+        "nurse_utilisation",
+        "equipment_utilisation",
+        "ot_utilisation",
+        "emergency_resource_pressure",
+        "arrivals_1h",
+        "arrivals_3h",
+        "ot_backlog",
+        "available_beds",
+        "available_icu",
+        "available_doctors",
+        "available_nurses",
+        "hour_of_day",
+        "hour_sin",
+        "hour_cos",
+        "is_weekend"
+      ],
+      "targets": {
+        "pressure_label": "pressure_label"
+      },
+      "split": {
+        "train_rows": 3007,
+        "validation_rows": 644,
+        "test_rows": 645,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T17:45:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/pressure_features_v2.csv"
+    },
+    "doctors": {
+      "rows": 11160,
+      "features": [
+        "current_load",
+        "max_operational_load",
+        "scheduled_procedures",
+        "department_pressure",
+        "expected_arrivals_1h",
+        "current_queue",
+        "icu_occupancy",
+        "bed_occupancy",
+        "hour_of_day",
+        "is_weekend",
+        "specialty_match",
+        "duty_status_on",
+        "availability_free"
+      ],
+      "targets": {
+        "load_1h": "target_load_1h",
+        "load_2h": "target_load_2h"
+      },
+      "split": {
+        "train_rows": 7811,
+        "validation_rows": 1675,
+        "test_rows": 1674,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T23:00:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/doctors_features_v2.csv"
+    },
+    "nurses": {
+      "rows": 29880,
+      "features": [
+        "current_load",
+        "max_operational_load",
+        "incoming_demand_1h",
+        "icu_demand",
+        "emergency_demand",
+        "department_pressure",
+        "bed_occupancy",
+        "hour_of_day",
+        "is_weekend",
+        "duty_status_on",
+        "availability_free"
+      ],
+      "targets": {
+        "load_1h": "target_load_1h",
+        "load_2h": "target_load_2h"
+      },
+      "split": {
+        "train_rows": 20916,
+        "validation_rows": 4482,
+        "test_rows": 4482,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T23:00:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/nurses_features_v2.csv"
+    },
+    "equipment": {
+      "rows": 10800,
+      "features": [
+        "units_total",
+        "units_in_use",
+        "units_reserved",
+        "units_available",
+        "utilisation",
+        "icu_demand",
+        "emergency_demand",
+        "current_queue",
+        "department_load",
+        "hour_of_day",
+        "is_weekend"
+      ],
+      "targets": {
+        "units_needed_1h": "target_units_needed_1h",
+        "units_needed_2h": "target_units_needed_2h"
+      },
+      "split": {
+        "train_rows": 7559,
+        "validation_rows": 1621,
+        "test_rows": 1620,
+        "train_start": "2026-06-01T00:00:00+00:00",
+        "test_end": "2026-07-15T23:30:00+00:00"
+      },
+      "path": "/home/user/MediCore/backend/ai/data/features/equipment_features_v2.csv"
+    }
+  }
+}

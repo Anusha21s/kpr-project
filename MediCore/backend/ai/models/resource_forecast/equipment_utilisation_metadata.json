@@ -1,0 +1,182 @@
+{
+  "model_name": "resource_utilisation_equipment",
+  "model_key": "equipment_utilisation",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "resource_forecast",
+  "target": "target_equipment_utilisation_1h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:37.808659+00:00",
+  "training_rows": 3021,
+  "validation_rows": 647,
+  "test_rows": 648,
+  "baseline_column": "equipment_utilisation",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 1.6221,
+      "rmse": 2.2098,
+      "r2": 0.957,
+      "mape": 3.274,
+      "bias": -0.445,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -4.090766543579099,
+        "upper_offset": 2.816617578124996,
+        "residual_std": 2.164476787619006
+      }
+    },
+    "test": {
+      "mae": 1.6602,
+      "rmse": 2.1256,
+      "r2": 0.935,
+      "mape": 3.444,
+      "bias": -0.1347,
+      "samples": 648,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -3.5000960906982406,
+        "upper_offset": 3.294804997253419,
+        "residual_std": 2.121281656538869
+      },
+      "skill_vs_baseline": 0.2959,
+      "skill_baseline": "persistence (equipment_utilisation)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 2.1774,
+        "rmse": 3.0182,
+        "r2": 0.9197,
+        "mape": 4.359,
+        "bias": 0.0112,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -4.7106,
+          "upper_offset": 4.208400000000002,
+          "residual_std": 3.0181719868275443
+        }
+      },
+      "test": {
+        "mae": 2.3578,
+        "rmse": 3.3165,
+        "r2": 0.8417,
+        "mape": 4.665,
+        "bias": 0.0015,
+        "samples": 648,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -5.572950000000002,
+          "upper_offset": 4.7086000000000015,
+          "residual_std": 3.3165317389313684
+        }
+      },
+      "column": "equipment_utilisation"
+    },
+    "best_iteration": 127,
+    "trees": 158,
+    "feature_importance": [
+      {
+        "feature": "emergency_resource_pressure",
+        "label": "emergency bay pressure",
+        "share": 0.4463
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.2976
+      },
+      {
+        "feature": "critical_queue",
+        "label": "critical-priority patients waiting",
+        "share": 0.1464
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.02
+      },
+      {
+        "feature": "occupied_beds",
+        "label": "occupied beds",
+        "share": 0.0159
+      },
+      {
+        "feature": "occupied_icu",
+        "label": "occupied icu",
+        "share": 0.0149
+      },
+      {
+        "feature": "available_beds",
+        "label": "available general beds",
+        "share": 0.0144
+      },
+      {
+        "feature": "admissions_rate_1h",
+        "label": "admissions in the last hour",
+        "share": 0.0074
+      },
+      {
+        "feature": "equipment_utilisation",
+        "label": "equipment utilisation",
+        "share": 0.0073
+      },
+      {
+        "feature": "icu_occupancy",
+        "label": "ICU occupancy",
+        "share": 0.0063
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/resource_forecast/equipment_utilisation_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "equipment utilisation over the next 1 hour"
+}

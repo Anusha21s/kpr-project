@@ -1,0 +1,234 @@
+{
+  "model_name": "pressure_xgboost",
+  "model_key": "pressure",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Classifier",
+  "family": "pressure_classifier",
+  "target": "pressure_label",
+  "labels": [
+    "NORMAL",
+    "MODERATE",
+    "HIGH",
+    "CRITICAL"
+  ],
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "current_queue",
+    "critical_queue",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "emergency_resource_pressure",
+    "arrivals_1h",
+    "arrivals_3h",
+    "ot_backlog",
+    "available_beds",
+    "available_icu",
+    "available_doctors",
+    "available_nurses",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "is_weekend"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:39.774337+00:00",
+  "training_rows": 3007,
+  "validation_rows": 644,
+  "test_rows": 645,
+  "class_balance": {
+    "NORMAL": 1956,
+    "MODERATE": 750,
+    "HIGH": 225,
+    "CRITICAL": 76
+  },
+  "metrics": {
+    "validation": {
+      "accuracy": 0.9798,
+      "macro_f1": 0.9752,
+      "weighted_f1": 0.9798,
+      "weighted_precision": 0.9798,
+      "weighted_recall": 0.9798,
+      "per_class": {
+        "NORMAL": {
+          "precision": 0.9862,
+          "recall": 0.9889,
+          "f1": 0.9876,
+          "support": 361
+        },
+        "MODERATE": {
+          "precision": 0.9746,
+          "recall": 0.9648,
+          "f1": 0.9697,
+          "support": 199
+        },
+        "HIGH": {
+          "precision": 0.9692,
+          "recall": 0.9692,
+          "f1": 0.9692,
+          "support": 65
+        },
+        "CRITICAL": {
+          "precision": 0.95,
+          "recall": 1.0,
+          "f1": 0.9744,
+          "support": 19
+        }
+      },
+      "confusion_matrix": {
+        "NORMAL": {
+          "NORMAL": 357,
+          "MODERATE": 4,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "MODERATE": {
+          "NORMAL": 5,
+          "MODERATE": 192,
+          "HIGH": 2,
+          "CRITICAL": 0
+        },
+        "HIGH": {
+          "NORMAL": 0,
+          "MODERATE": 1,
+          "HIGH": 63,
+          "CRITICAL": 1
+        },
+        "CRITICAL": {
+          "NORMAL": 0,
+          "MODERATE": 0,
+          "HIGH": 0,
+          "CRITICAL": 19
+        }
+      },
+      "samples": 644
+    },
+    "test": {
+      "accuracy": 0.9721,
+      "macro_f1": 0.936,
+      "weighted_f1": 0.9721,
+      "weighted_precision": 0.9726,
+      "weighted_recall": 0.9721,
+      "per_class": {
+        "NORMAL": {
+          "precision": 0.9721,
+          "recall": 0.9937,
+          "f1": 0.9828,
+          "support": 316
+        },
+        "MODERATE": {
+          "precision": 0.9919,
+          "recall": 0.9531,
+          "f1": 0.9721,
+          "support": 256
+        },
+        "HIGH": {
+          "precision": 0.9206,
+          "recall": 0.9667,
+          "f1": 0.9431,
+          "support": 60
+        },
+        "CRITICAL": {
+          "precision": 0.8462,
+          "recall": 0.8462,
+          "f1": 0.8462,
+          "support": 13
+        }
+      },
+      "confusion_matrix": {
+        "NORMAL": {
+          "NORMAL": 314,
+          "MODERATE": 2,
+          "HIGH": 0,
+          "CRITICAL": 0
+        },
+        "MODERATE": {
+          "NORMAL": 9,
+          "MODERATE": 244,
+          "HIGH": 3,
+          "CRITICAL": 0
+        },
+        "HIGH": {
+          "NORMAL": 0,
+          "MODERATE": 0,
+          "HIGH": 58,
+          "CRITICAL": 2
+        },
+        "CRITICAL": {
+          "NORMAL": 0,
+          "MODERATE": 0,
+          "HIGH": 2,
+          "CRITICAL": 11
+        }
+      },
+      "samples": 645
+    },
+    "best_iteration": 193,
+    "trees": 219,
+    "labels": [
+      "NORMAL",
+      "MODERATE",
+      "HIGH",
+      "CRITICAL"
+    ],
+    "label_source": "hospital pressure policy bands (approved operationally, reproduced from labelled operational history)",
+    "feature_importance": [
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.2144
+      },
+      {
+        "feature": "available_beds",
+        "label": "available general beds",
+        "share": 0.1595
+      },
+      {
+        "feature": "critical_queue",
+        "label": "critical-priority patients waiting",
+        "share": 0.1338
+      },
+      {
+        "feature": "nurse_utilisation",
+        "label": "nurse utilisation",
+        "share": 0.0849
+      },
+      {
+        "feature": "arrivals_3h",
+        "label": "emergency arrivals in the last 3 hours",
+        "share": 0.0734
+      },
+      {
+        "feature": "ot_utilisation",
+        "label": "operating theatre utilisation",
+        "share": 0.0722
+      },
+      {
+        "feature": "doctor_utilisation",
+        "label": "doctor utilisation",
+        "share": 0.0579
+      },
+      {
+        "feature": "bed_occupancy",
+        "label": "general bed occupancy",
+        "share": 0.0382
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.0352
+      },
+      {
+        "feature": "emergency_resource_pressure",
+        "label": "emergency bay pressure",
+        "share": 0.0271
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/pressure_classifier/pressure_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Trained on the hospital's approved pressure banding (NORMAL/MODERATE/HIGH/CRITICAL). The rule-based pressure engine in the Node backend remains the authority and the fallback; this classifier reports the probability of each band."
+}

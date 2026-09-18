@@ -1,0 +1,184 @@
+{
+  "model_name": "patient_flow_xgboost_admissions_6h",
+  "model_key": "admissions_6h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "patient_flow",
+  "target": "target_admissions_6h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "queue_change_30m",
+    "rolling_queue_max"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:41.312773+00:00",
+  "training_rows": 3007,
+  "validation_rows": 644,
+  "test_rows": 645,
+  "baseline_column": "admissions_rate_1h",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 2.0167,
+      "rmse": 2.5476,
+      "r2": 0.2886,
+      "mape": 55.845,
+      "bias": -0.0652,
+      "samples": 644,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -4.142090119552613,
+        "upper_offset": 3.949656076431275,
+        "residual_std": 2.5468115737208548
+      }
+    },
+    "test": {
+      "mae": 2.1794,
+      "rmse": 2.7934,
+      "r2": 0.1257,
+      "mape": 48.211,
+      "bias": -0.393,
+      "samples": 645,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -4.9853916824340825,
+        "upper_offset": 3.6418583175659163,
+        "residual_std": 2.765660081628718
+      },
+      "skill_vs_baseline": 0.3879,
+      "skill_baseline": "persistence (admissions_rate_1h)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 3.3881,
+        "rmse": 4.2272,
+        "r2": -0.9587,
+        "mape": 84.482,
+        "bias": 0.0206,
+        "samples": 644,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -6.905750000000001,
+          "upper_offset": 6.73615,
+          "residual_std": 4.227139787930519
+        }
+      },
+      "test": {
+        "mae": 3.5608,
+        "rmse": 4.4434,
+        "r2": -1.212,
+        "mape": 85.652,
+        "bias": -0.0336,
+        "samples": 645,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -7.873400000000001,
+          "upper_offset": 6.900799999999999,
+          "residual_std": 4.443232097483615
+        }
+      },
+      "column": "admissions_rate_1h"
+    },
+    "best_iteration": 36,
+    "trees": 67,
+    "feature_importance": [
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.1148
+      },
+      {
+        "feature": "hour_sin",
+        "label": "daily cycle (rising/falling phase)",
+        "share": 0.0716
+      },
+      {
+        "feature": "hour_cos",
+        "label": "daily cycle (peak/trough phase)",
+        "share": 0.0645
+      },
+      {
+        "feature": "is_weekend",
+        "label": "weekend",
+        "share": 0.0619
+      },
+      {
+        "feature": "rolling_queue_max",
+        "label": "rolling peak queue",
+        "share": 0.0421
+      },
+      {
+        "feature": "day_of_week",
+        "label": "day of week",
+        "share": 0.0404
+      },
+      {
+        "feature": "critical_queue",
+        "label": "critical-priority patients waiting",
+        "share": 0.0355
+      },
+      {
+        "feature": "arrivals_3h",
+        "label": "emergency arrivals in the last 3 hours",
+        "share": 0.0343
+      },
+      {
+        "feature": "ot_backlog",
+        "label": "waiting surgical cases",
+        "share": 0.0341
+      },
+      {
+        "feature": "occupied_icu",
+        "label": "occupied icu",
+        "share": 0.0336
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/patient_flow/admissions_6h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Forecasts admissions per hour six hours out. Operational flow only: no diagnosis, treatment or outcome prediction."
+}

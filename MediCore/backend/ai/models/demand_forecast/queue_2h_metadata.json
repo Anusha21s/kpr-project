@@ -1,0 +1,183 @@
+{
+  "model_name": "emergency_demand_queue_2h",
+  "model_key": "queue_2h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "demand_forecast",
+  "target": "target_queue_2h",
+  "features": [
+    "current_queue",
+    "critical_queue",
+    "priority_mix_critical",
+    "arrivals_15m",
+    "arrivals_30m",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "arrivals_24h",
+    "arrival_rate_trend",
+    "queue_change_15m",
+    "queue_change_30m",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "rolling_queue_max",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "available_doctors",
+    "available_nurses"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:36.673255+00:00",
+  "training_rows": 3018,
+  "validation_rows": 647,
+  "test_rows": 647,
+  "baseline_column": "current_queue",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 2.0331,
+      "rmse": 5.6969,
+      "r2": 0.8694,
+      "mape": 124.034,
+      "bias": -0.1373,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -5.378737225055696,
+        "upper_offset": 3.704591682434081,
+        "residual_std": 5.695272273392696
+      }
+    },
+    "test": {
+      "mae": 2.1987,
+      "rmse": 4.5907,
+      "r2": 0.7288,
+      "mape": 120.632,
+      "bias": 0.4646,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -4.272161879777909,
+        "upper_offset": 6.625036603927609,
+        "residual_std": 4.567079577455156
+      },
+      "skill_vs_baseline": 0.189,
+      "skill_baseline": "persistence (current_queue)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 2.4719,
+        "rmse": 7.2302,
+        "r2": 0.7896,
+        "mape": 175.936,
+        "bias": 0.0021,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -5.4140000000000015,
+          "upper_offset": 9.047999999999984,
+          "residual_std": 7.230199597394625
+        }
+      },
+      "test": {
+        "mae": 2.7111,
+        "rmse": 6.3348,
+        "r2": 0.4836,
+        "mape": 145.502,
+        "bias": 0.0,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -10.424000000000003,
+          "upper_offset": 9.567999999999989,
+          "residual_std": 6.334825605804041
+        }
+      },
+      "column": "current_queue"
+    },
+    "best_iteration": 130,
+    "trees": 161,
+    "feature_importance": [
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.4816
+      },
+      {
+        "feature": "queue_change_1h",
+        "label": "queue change over the last hour",
+        "share": 0.148
+      },
+      {
+        "feature": "critical_queue",
+        "label": "critical-priority patients waiting",
+        "share": 0.1447
+      },
+      {
+        "feature": "hour_cos",
+        "label": "daily cycle (peak/trough phase)",
+        "share": 0.0502
+      },
+      {
+        "feature": "icu_occupancy",
+        "label": "ICU occupancy",
+        "share": 0.0195
+      },
+      {
+        "feature": "arrivals_30m",
+        "label": "emergency arrivals in the last 30 minutes",
+        "share": 0.0168
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.0111
+      },
+      {
+        "feature": "arrivals_1h",
+        "label": "emergency arrivals in the last hour",
+        "share": 0.0107
+      },
+      {
+        "feature": "arrivals_15m",
+        "label": "emergency arrivals in the last 15 minutes",
+        "share": 0.0099
+      },
+      {
+        "feature": "rolling_queue_max",
+        "label": "rolling peak queue",
+        "share": 0.0093
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/demand_forecast/queue_2h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "targets the emergency queue in 2 hours"
+}

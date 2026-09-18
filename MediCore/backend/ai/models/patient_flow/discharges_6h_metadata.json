@@ -1,0 +1,184 @@
+{
+  "model_name": "patient_flow_xgboost_discharges_6h",
+  "model_key": "discharges_6h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "patient_flow",
+  "target": "target_discharges_6h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday",
+    "queue_change_30m",
+    "rolling_queue_max"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:41.466868+00:00",
+  "training_rows": 3007,
+  "validation_rows": 644,
+  "test_rows": 645,
+  "baseline_column": "discharge_rate_1h",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 1.1054,
+      "rmse": 1.4206,
+      "r2": 0.4862,
+      "mape": 32.189,
+      "bias": -0.0393,
+      "samples": 644,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -2.8152448461532593,
+        "upper_offset": 2.071564630317688,
+        "residual_std": 1.4201043301008622
+      }
+    },
+    "test": {
+      "mae": 1.2055,
+      "rmse": 1.6885,
+      "r2": 0.2706,
+      "mape": 31.911,
+      "bias": -0.3499,
+      "samples": 645,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -3.7769310916900634,
+        "upper_offset": 1.958843067932129,
+        "residual_std": 1.6518706715990064
+      },
+      "skill_vs_baseline": 0.4533,
+      "skill_baseline": "persistence (discharge_rate_1h)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 2.1261,
+        "rmse": 2.6337,
+        "r2": -0.7658,
+        "mape": 63.982,
+        "bias": 0.047,
+        "samples": 644,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -4.30685,
+          "upper_offset": 4.263,
+          "residual_std": 2.633274766949302
+        }
+      },
+      "test": {
+        "mae": 2.2052,
+        "rmse": 2.7865,
+        "r2": -0.9865,
+        "mape": 64.643,
+        "bias": -0.0866,
+        "samples": 645,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -4.984,
+          "upper_offset": 4.4007999999999985,
+          "residual_std": 2.7851603057137533
+        }
+      },
+      "column": "discharge_rate_1h"
+    },
+    "best_iteration": 52,
+    "trees": 83,
+    "feature_importance": [
+      {
+        "feature": "hour_cos",
+        "label": "daily cycle (peak/trough phase)",
+        "share": 0.2577
+      },
+      {
+        "feature": "is_weekend",
+        "label": "weekend",
+        "share": 0.0667
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.0452
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0409
+      },
+      {
+        "feature": "day_of_week",
+        "label": "day of week",
+        "share": 0.0406
+      },
+      {
+        "feature": "icu_occupancy",
+        "label": "ICU occupancy",
+        "share": 0.0368
+      },
+      {
+        "feature": "rolling_queue_max",
+        "label": "rolling peak queue",
+        "share": 0.0357
+      },
+      {
+        "feature": "critical_queue",
+        "label": "critical-priority patients waiting",
+        "share": 0.034
+      },
+      {
+        "feature": "hour_sin",
+        "label": "daily cycle (rising/falling phase)",
+        "share": 0.0333
+      },
+      {
+        "feature": "available_doctors",
+        "label": "doctors on duty and available",
+        "share": 0.0329
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/patient_flow/discharges_6h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Forecasts discharges per hour six hours out. Operational flow only: no diagnosis, treatment or outcome prediction."
+}

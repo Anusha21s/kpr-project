@@ -1,0 +1,97 @@
+/**
+ * Operating theatre complex — OT-01 to OT-04.
+ * `startMinutes` / `endMinutes` are minutes from midnight and drive the
+ * timeline layout on the clinical and coordinator screens.
+ */
+
+export const OT_ROOMS = [
+  {
+    id: 'OT-01',
+    name: 'OT-01 — Emergency Theatre',
+    status: 'Ongoing',
+    start: '09:00 AM',
+    end: '11:00 AM',
+    startMinutes: 540,
+    endMinutes: 660,
+    procedure: 'Emergency laparotomy — exploratory',
+    surgeon: 'Dr. Rajesh Iyer',
+    surgeonRef: 'DOC-1081',
+    anaesthetist: 'Dr. Meera Nair',
+    patientId: 'IP-2211',
+    patientLabel: 'IP-2211 A. Fernandes',
+    requiredEquipment: ['Anaesthesia Workstation', 'Diathermy', 'Laparoscopic Tower'],
+    equipmentReady: true,
+    nurses: ['NUR-501'],
+    notes: 'Procedure overrun risk: 20 minutes. Conversion decision pending.',
+  },
+  {
+    id: 'OT-02',
+    name: 'OT-02 — General Theatre',
+    status: 'Scheduled',
+    start: '11:30 AM',
+    end: '01:30 PM',
+    startMinutes: 690,
+    endMinutes: 810,
+    procedure: 'Orthopaedic — femoral fixation',
+    surgeon: 'Dr. Sameer Khan',
+    surgeonRef: 'DOC-1092',
+    anaesthetist: 'Dr. Meera Nair',
+    patientId: 'IP-2242',
+    patientLabel: 'IP-2242 D. Kaur',
+    requiredEquipment: ['Anaesthesia Workstation', 'C-Arm Imaging', 'Diathermy'],
+    equipmentReady: true,
+    nurses: ['NUR-502'],
+    notes: 'Pre-operative checklist started. Patient in holding area.',
+  },
+  {
+    id: 'OT-03',
+    name: 'OT-03 — Elective Theatre',
+    status: 'Available',
+    start: null,
+    end: null,
+    startMinutes: null,
+    endMinutes: null,
+    procedure: 'No procedure scheduled',
+    surgeon: 'Unassigned',
+    surgeonRef: null,
+    anaesthetist: 'Unassigned',
+    patientId: null,
+    patientLabel: null,
+    requiredEquipment: ['Anaesthesia Workstation', 'Diathermy'],
+    equipmentReady: true,
+    nurses: [],
+    notes: 'Next available slot 02:30 PM. Sterile set ready.',
+    nextAvailableSlot: '02:30 PM',
+    nextAvailableMinutes: 870,
+  },
+  {
+    id: 'OT-04',
+    name: 'OT-04 — Cardiac Theatre',
+    status: 'Maintenance',
+    start: null,
+    end: null,
+    startMinutes: null,
+    endMinutes: null,
+    procedure: 'Equipment maintenance',
+    surgeon: 'Unassigned',
+    surgeonRef: null,
+    anaesthetist: 'Unassigned',
+    patientId: null,
+    patientLabel: null,
+    requiredEquipment: ['Anaesthesia Workstation', 'Perfusion Unit'],
+    equipmentReady: false,
+    nurses: [],
+    notes: 'Perfusion unit calibration until 04:00 PM. Not available for scheduling today.',
+    nextAvailableSlot: 'Tomorrow 08:00 AM',
+    nextAvailableMinutes: null,
+  },
+];
+
+/** Additional OT demand raised by the surge, resolved as operational options. */
+export const OT_BACKLOG = [
+  { id: 'OTR-01', patientId: 'P025', requirement: 'Emergency OT — damage-control surgery', urgency: 'Critical', requestedBy: 'Emergency Medicine' },
+  { id: 'OTR-02', patientId: 'P017', requirement: 'Orthopaedic — wound debridement', urgency: 'High', requestedBy: 'Orthopaedics' },
+  { id: 'OTR-03', patientId: 'P022', requirement: 'Surgical review — may require OT', urgency: 'High', requestedBy: 'General Surgery' },
+];
+
+export const getOtRoomById = (rooms, id) => rooms.find((room) => room.id === id) || null;

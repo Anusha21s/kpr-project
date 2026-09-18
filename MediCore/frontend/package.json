@@ -1,0 +1,25 @@
+{
+  "name": "medicore-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "MediCore - Hospital Command Center & Resource Optimization (frontend prototype)",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0 --port 4173",
+    "lint": "echo \"no linter configured for this prototype\""
+  },
+  "dependencies": {
+    "lucide-react": "^0.451.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2",
+    "recharts": "^2.12.7",
+    "socket.io-client": "^4.8.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.2",
+    "vite": "^5.4.8"
+  }
+}

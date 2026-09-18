@@ -1,0 +1,163 @@
+{
+  "model_name": "equipment_demand_xgboost_units_needed_1h",
+  "model_key": "units_needed_1h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "equipment_demand",
+  "target": "target_units_needed_1h",
+  "features": [
+    "units_total",
+    "units_in_use",
+    "units_reserved",
+    "units_available",
+    "utilisation",
+    "icu_demand",
+    "emergency_demand",
+    "current_queue",
+    "department_load",
+    "hour_of_day",
+    "is_weekend"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:41.011095+00:00",
+  "training_rows": 7559,
+  "validation_rows": 1621,
+  "test_rows": 1620,
+  "baseline_column": "units_in_use",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 0.4759,
+      "rmse": 0.6126,
+      "r2": 0.9949,
+      "mape": 5.589,
+      "bias": -0.0513,
+      "samples": 1621,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -1.0478587112426752,
+        "upper_offset": 0.8737161865234384,
+        "residual_std": 0.6104497321821988
+      }
+    },
+    "test": {
+      "mae": 0.47,
+      "rmse": 0.5932,
+      "r2": 0.9951,
+      "mape": 5.503,
+      "bias": 0.0282,
+      "samples": 1620,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -0.9343134716033942,
+        "upper_offset": 1.0006457399368287,
+        "residual_std": 0.5925032185892671
+      },
+      "skill_vs_baseline": 0.8811,
+      "skill_baseline": "persistence (units_in_use)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 3.9567,
+        "rmse": 5.7401,
+        "r2": 0.5529,
+        "mape": 29.963,
+        "bias": 0.7814,
+        "samples": 1621,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -4.196999999999999,
+          "upper_offset": 12.732,
+          "residual_std": 5.686682412833725
+        }
+      },
+      "test": {
+        "mae": 3.9513,
+        "rmse": 5.6956,
+        "r2": 0.5451,
+        "mape": 30.037,
+        "bias": 0.8077,
+        "samples": 1620,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -3.6450500000000003,
+          "upper_offset": 12.71005,
+          "residual_std": 5.638053614122095
+        }
+      },
+      "column": "units_in_use"
+    },
+    "best_iteration": 99,
+    "trees": 130,
+    "feature_importance": [
+      {
+        "feature": "units_total",
+        "label": "units total",
+        "share": 0.9717
+      },
+      {
+        "feature": "units_in_use",
+        "label": "units in use",
+        "share": 0.0112
+      },
+      {
+        "feature": "emergency_demand",
+        "label": "emergency demand",
+        "share": 0.0094
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.0048
+      },
+      {
+        "feature": "utilisation",
+        "label": "utilisation",
+        "share": 0.0016
+      },
+      {
+        "feature": "icu_demand",
+        "label": "icu demand",
+        "share": 0.0008
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0002
+      },
+      {
+        "feature": "units_available",
+        "label": "units available",
+        "share": 0.0001
+      },
+      {
+        "feature": "department_load",
+        "label": "department load",
+        "share": 0.0001
+      },
+      {
+        "feature": "units_reserved",
+        "label": "units reserved",
+        "share": 0.0001
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/equipment_demand/units_needed_1h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Forecasts units required in the next hour for one equipment category. Reported as a projected gap, never as an allocation decision."
+}

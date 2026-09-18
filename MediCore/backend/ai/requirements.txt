@@ -1,0 +1,17 @@
+# MediCore HE-02 AI layer — Python dependencies
+#
+# Install once:
+#   pip install -r ai/requirements.txt
+#
+# The models are gradient-boosted trees and an isolation forest; there is no
+# deep-learning dependency and no GPU requirement. Training the full model set
+# takes roughly 15 seconds on two CPU cores.
+xgboost>=2.0,<4.0        # demand / resource / workload / equipment / flow regressors + pressure classifier
+scikit-learn>=1.4,<2.0   # Isolation Forest (surge detection), train/test tooling
+pandas>=2.0,<3.0         # dataset assembly and feature engineering
+numpy>=1.26,<3.0         # numerics
+joblib>=1.3              # artifact persistence for the isolation forest
+ortools>=9.8,<10.0       # Google OR-Tools CP-SAT — the multi-resource optimizer
+fastapi>=0.110           # inference API (called by the Node backend)
+uvicorn>=0.27            # ASGI server
+pydantic>=2.5            # request validation

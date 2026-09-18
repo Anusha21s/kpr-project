@@ -1,0 +1,182 @@
+{
+  "model_name": "resource_utilisation_bed",
+  "model_key": "bed_occupancy",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "resource_forecast",
+  "target": "target_bed_occupancy_1h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:36.986658+00:00",
+  "training_rows": 3021,
+  "validation_rows": 647,
+  "test_rows": 648,
+  "baseline_column": "bed_occupancy",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 0.7579,
+      "rmse": 1.0109,
+      "r2": 0.9103,
+      "mape": 0.9,
+      "bias": -0.0206,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -1.675405706787113,
+        "upper_offset": 1.596565966796875,
+        "residual_std": 1.0106676531334329
+      }
+    },
+    "test": {
+      "mae": 0.824,
+      "rmse": 1.1528,
+      "r2": 0.8766,
+      "mape": 0.971,
+      "bias": -0.1067,
+      "samples": 648,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -1.9235608856201183,
+        "upper_offset": 1.4826902435302711,
+        "residual_std": 1.1478083238587253
+      },
+      "skill_vs_baseline": 0.2351,
+      "skill_baseline": "persistence (bed_occupancy)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 1.0294,
+        "rmse": 1.315,
+        "r2": 0.8482,
+        "mape": 1.222,
+        "bias": 0.0237,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -2.2750999999999992,
+          "upper_offset": 2.1271999999999984,
+          "residual_std": 1.3147879267736662
+        }
+      },
+      "test": {
+        "mae": 1.0772,
+        "rmse": 1.4494,
+        "r2": 0.805,
+        "mape": 1.266,
+        "bias": -0.019,
+        "samples": 648,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -2.6503499999999995,
+          "upper_offset": 2.0133499999999995,
+          "residual_std": 1.4492437329182208
+        }
+      },
+      "column": "bed_occupancy"
+    },
+    "best_iteration": 115,
+    "trees": 146,
+    "feature_importance": [
+      {
+        "feature": "occupied_icu",
+        "label": "occupied icu",
+        "share": 0.4539
+      },
+      {
+        "feature": "available_beds",
+        "label": "available general beds",
+        "share": 0.1107
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.1084
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.0606
+      },
+      {
+        "feature": "emergency_resource_pressure",
+        "label": "emergency bay pressure",
+        "share": 0.0564
+      },
+      {
+        "feature": "icu_occupancy",
+        "label": "ICU occupancy",
+        "share": 0.0512
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0371
+      },
+      {
+        "feature": "occupied_beds",
+        "label": "occupied beds",
+        "share": 0.0324
+      },
+      {
+        "feature": "bed_occupancy",
+        "label": "general bed occupancy",
+        "share": 0.0177
+      },
+      {
+        "feature": "arrivals_3h",
+        "label": "emergency arrivals in the last 3 hours",
+        "share": 0.0123
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/resource_forecast/bed_occupancy_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "general bed occupancy over the next 1 hour"
+}

@@ -1,0 +1,182 @@
+{
+  "model_name": "resource_utilisation_ot",
+  "model_key": "ot_utilisation",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "resource_forecast",
+  "target": "target_ot_utilisation_1h",
+  "features": [
+    "bed_occupancy",
+    "icu_occupancy",
+    "available_beds",
+    "available_icu",
+    "occupied_beds",
+    "occupied_icu",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "ot_backlog_change_1h",
+    "emergency_resource_pressure",
+    "current_queue",
+    "critical_queue",
+    "arrivals_1h",
+    "arrivals_3h",
+    "arrivals_6h",
+    "admissions_rate_1h",
+    "discharge_rate_1h",
+    "available_doctors",
+    "available_nurses",
+    "queue_change_1h",
+    "rolling_queue_mean",
+    "hour_of_day",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:37.942005+00:00",
+  "training_rows": 3021,
+  "validation_rows": 647,
+  "test_rows": 648,
+  "baseline_column": "ot_utilisation",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 13.2878,
+      "rmse": 18.5396,
+      "r2": 0.4517,
+      "mape": 29.309,
+      "bias": -1.7406,
+      "samples": 647,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -24.902475738525393,
+        "upper_offset": 34.94437152099608,
+        "residual_std": 18.457757466565887
+      }
+    },
+    "test": {
+      "mae": 13.0025,
+      "rmse": 18.6852,
+      "r2": 0.4559,
+      "mape": 38.251,
+      "bias": -1.7793,
+      "samples": 648,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -23.821414947509766,
+        "upper_offset": 38.60573837738036,
+        "residual_std": 18.60027041212741
+      },
+      "skill_vs_baseline": 0.0058,
+      "skill_baseline": "persistence (ot_utilisation)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 14.4908,
+        "rmse": 26.0311,
+        "r2": -0.0809,
+        "mape": 32.734,
+        "bias": 0.2764,
+        "samples": 647,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -51.047599999999996,
+          "upper_offset": 51.067,
+          "residual_std": 26.02966884064319
+        }
+      },
+      "test": {
+        "mae": 13.0777,
+        "rmse": 24.8986,
+        "r2": 0.034,
+        "mape": 37.762,
+        "bias": -0.1587,
+        "samples": 648,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -49.11575,
+          "upper_offset": 48.64044999999998,
+          "residual_std": 24.898076050926516
+        }
+      },
+      "column": "ot_utilisation"
+    },
+    "best_iteration": 40,
+    "trees": 71,
+    "feature_importance": [
+      {
+        "feature": "available_doctors",
+        "label": "doctors on duty and available",
+        "share": 0.1755
+      },
+      {
+        "feature": "ot_backlog",
+        "label": "waiting surgical cases",
+        "share": 0.1047
+      },
+      {
+        "feature": "hour_cos",
+        "label": "daily cycle (peak/trough phase)",
+        "share": 0.0664
+      },
+      {
+        "feature": "available_nurses",
+        "label": "nurses on duty and available",
+        "share": 0.062
+      },
+      {
+        "feature": "ot_utilisation",
+        "label": "operating theatre utilisation",
+        "share": 0.041
+      },
+      {
+        "feature": "emergency_resource_pressure",
+        "label": "emergency bay pressure",
+        "share": 0.0359
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0327
+      },
+      {
+        "feature": "available_icu",
+        "label": "available ICU beds",
+        "share": 0.0324
+      },
+      {
+        "feature": "hour_sin",
+        "label": "daily cycle (rising/falling phase)",
+        "share": 0.0322
+      },
+      {
+        "feature": "day_of_week",
+        "label": "day of week",
+        "share": 0.0308
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/resource_forecast/ot_utilisation_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "operating theatre utilisation over the next 1 hour"
+}

@@ -1,0 +1,776 @@
+// MediCore — operational database schema
+// PostgreSQL + Prisma. The database owns the hospital's operational state:
+// every dashboard number is derived from these tables (never hardcoded).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------ enums
+
+enum DutyStatus {
+  ON_DUTY
+  OFF_DUTY
+  LEAVE
+  UNAVAILABLE
+}
+
+enum Availability {
+  Available
+  Assigned
+  InProcedure
+  Unavailable
+}
+
+enum WorkloadBand {
+  Low
+  Moderate
+  High
+}
+
+enum Priority {
+  Critical
+  High
+  Medium
+  Low
+}
+
+enum BedUnit {
+  GENERAL
+  ICU
+  EMERGENCY
+  MATERNITY
+}
+
+enum BedStatus {
+  AVAILABLE
+  OCCUPIED
+  RESERVED
+  CLEANING
+  MAINTENANCE
+}
+
+enum QueueStatus {
+  WAITING
+  ALLOCATION_PROPOSED
+  ALLOCATED
+  IN_TREATMENT
+  CLOSED
+}
+
+enum TheatreStatus {
+  AVAILABLE
+  ONGOING
+  SCHEDULED
+  MAINTENANCE
+  HELD
+}
+
+enum OtSlotStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  HELD
+  CANCELLED
+}
+
+enum AllocationType {
+  BED
+  ICU_BED
+  DOCTOR
+  NURSE
+  EQUIPMENT
+  OT
+  EMERGENCY_RESOURCE
+}
+
+enum AllocationStatus {
+  PROPOSED
+  PENDING_APPROVAL
+  CONFIRMED
+  REJECTED
+  CANCELLED
+}
+
+enum RecommendationAction {
+  ALLOCATE
+  REALLOCATE
+  HOLD
+  ESCALATE
+  REVIEW
+  REINFORCE
+}
+
+enum ApprovalStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  WITHDRAWN
+}
+
+enum AlertType {
+  Critical
+  Operational
+}
+
+enum AlertSeverity {
+  CRITICAL
+  HIGH
+  OPERATIONAL
+  INFO
+}
+
+enum AlertStatus {
+  ACTIVE
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum SimulationStatus {
+  NORMAL
+  SURGE
+  COMMITTED
+  REVERTED
+}
+
+// ------------------------------------------------------------------ access control
+
+/// Role catalogue with the operational permission list used by `authorize()`.
+model Role {
+  code        String   @id
+  label       String
+  description String?
+  permissions Json
+  users       User[]
+  createdAt   DateTime @default(now())
+}
+
+model User {
+  id           String    @id @default(cuid())
+  staffId      String    @unique
+  staffRef     String?   @unique
+  name         String
+  title        String?
+  department   String?
+  roleCode     String
+  role         Role      @relation(fields: [roleCode], references: [code])
+  passwordHash String
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  doctor            Doctor?
+  nurse             Nurse?
+  notifications     Notification[]
+  auditLogs         AuditLog[]
+  allocations       Allocation[]
+  optimizationRuns  OptimizationRun[]
+  simulations       SurgeSimulation[]
+  requestedApprovals Approval[] @relation("ApprovalRequester")
+  decidedApprovals  Approval[]  @relation("ApprovalDecider")
+
+  @@index([roleCode])
+  @@index([department])
+}
+
+// ------------------------------------------------------------------ clinical staff
+
+model Doctor {
+  id                String       @id // staff ref, e.g. DOC-1042
+  userId            String?      @unique
+  user              User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name              String
+  specialty         String
+  department        String
+  dutyStatus        DutyStatus   @default(ON_DUTY)
+  availability      Availability @default(Available)
+  currentAssignment String?
+  workload          WorkloadBand @default(Moderate)
+  patients          Int          @default(0)
+  maxOperationalLoad Int         @default(12)
+  since             String?
+  contact           String?
+  shiftBlock        String?
+  shift             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  duties      DoctorDuty[]
+  patientsList Patient[]   @relation("PatientAssignedDoctor")
+  allocations Allocation[]
+  otSlots     OtSchedule[] @relation("OtSurgeon")
+  tasks       ClinicalTask[]
+
+  @@index([specialty])
+  @@index([dutyStatus])
+}
+
+model DoctorDuty {
+  id         String     @id @default(cuid())
+  doctorId   String
+  doctor     Doctor     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  shiftBlock String // MORNING | EVENING | NIGHT
+  shiftLabel String
+  dutyDate   DateTime
+  status     DutyStatus @default(ON_DUTY)
+  note       String?
+  createdAt  DateTime   @default(now())
+
+  @@unique([doctorId, shiftBlock, dutyDate])
+  @@index([dutyDate])
+}
+
+model Nurse {
+  id                String       @id // staff ref, e.g. NUR-204
+  userId            String?      @unique
+  user              User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name              String
+  department        String
+  dutyStatus        DutyStatus   @default(ON_DUTY)
+  availability      Availability @default(Available)
+  currentAssignment String?
+  workload          WorkloadBand @default(Low)
+  assignedPatients  Int          @default(0)
+  maxOperationalLoad Int         @default(5)
+  shiftBlock        String?
+  shift             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  duties      NurseDuty[]
+  patientsList Patient[]  @relation("PatientAssignedNurse")
+  allocations Allocation[]
+  tasks       ClinicalTask[]
+
+  @@index([department])
+  @@index([dutyStatus])
+}
+
+model NurseDuty {
+  id         String     @id @default(cuid())
+  nurseId    String
+  nurse      Nurse      @relation(fields: [nurseId], references: [id], onDelete: Cascade)
+  shiftBlock String
+  shiftLabel String
+  dutyDate   DateTime
+  status     DutyStatus @default(ON_DUTY)
+  note       String?
+  createdAt  DateTime   @default(now())
+
+  @@unique([nurseId, shiftBlock, dutyDate])
+  @@index([dutyDate])
+}
+
+// ------------------------------------------------------------------ patients
+
+model Patient {
+  id                    String   @id @default(cuid())
+  patientNumber         String   @unique // P025, IP-2214 …
+  name                  String?
+  age                   Int?
+  sex                   String?
+  department            String
+  priority              Priority @default(Medium)
+  triage                String   @default("ESI 3")
+  requiredResource      String?
+  secondaryResource     String?
+  specialtyRequired     String?
+  requiresVentilator    Boolean  @default(false)
+  needsOt               Boolean  @default(false)
+  clinicalRequirementBy String?
+  requirementConfirmedAt DateTime?
+  notes                 String?
+  diagnosis             String?
+  plan                  String?
+  vitals                Json?
+  status                String   @default("Active")
+
+  assignedDoctorId String?
+  assignedDoctor   Doctor? @relation("PatientAssignedDoctor", fields: [assignedDoctorId], references: [id], onDelete: SetNull)
+  assignedNurseId  String?
+  assignedNurse    Nurse?  @relation("PatientAssignedNurse", fields: [assignedNurseId], references: [id], onDelete: SetNull)
+  assignedBedId    String? // mirror of Bed.patientId (occupancy is owned by Bed)
+  assignedOtId     String?
+
+  isSimulated  Boolean  @default(false)
+  simulationId String?
+  simulation   SurgeSimulation? @relation(fields: [simulationId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  queueEntry  PatientQueue?
+  arrivals    ArrivalLog[]
+  occupiedBed Bed?            @relation("BedOccupant")
+  allocations Allocation[]
+  alerts      Alert[]
+  notifications Notification[]
+  otSlots     OtSchedule[]
+
+  @@index([priority])
+  @@index([department])
+  @@index([assignedDoctorId])
+  @@index([assignedNurseId])
+  @@index([assignedBedId])
+  @@index([isSimulated])
+}
+
+model PatientQueue {
+  id               String      @id @default(cuid())
+  patientId        String      @unique
+  patient          Patient     @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  status           QueueStatus @default(WAITING)
+  waitingSince     DateTime    @default(now())
+  waitingMinutes   Int         @default(0)
+  position         Int         @default(0)
+  requiredResource String?
+  secondaryResource String?
+  priority         Priority    @default(Medium)
+  triage           String      @default("ESI 3")
+  escalated        Boolean     @default(false)
+  securedResources Json        @default("[]")
+  resolvedAt       DateTime?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  @@index([status])
+  @@index([priority])
+}
+
+// ------------------------------------------------------------------ beds
+
+model Bed {
+  id           String    @id // ICU-05, GEN-12 …
+  wardId       String
+  ward         String
+  unit         BedUnit
+  bedType      String
+  status       BedStatus @default(AVAILABLE)
+  patientId    String?   @unique
+  patientRef   String? // denormalised patient number for the ward board
+  heldFor      String?
+  availableFrom DateTime?
+  escalation   Boolean   @default(false)
+  features     String[]  @default([])
+  notes        String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  patient     Patient?     @relation("BedOccupant", fields: [patientId], references: [id], onDelete: SetNull)
+  allocations Allocation[]
+
+  @@index([unit])
+  @@index([status])
+  @@index([wardId])
+}
+
+// ------------------------------------------------------------------ equipment & emergency resources
+
+model Equipment {
+  id          String   @id // ventilators, monitors, ot, …
+  name        String
+  kind        String // VENTILATOR | MONITOR | OT_EQUIPMENT | …
+  description String?
+  total       Int      @default(0)
+  inUse       Int      @default(0)
+  reserved    Int      @default(0)
+  location    String?
+  status      String   @default("Available")
+  criticalFor String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  units       EquipmentUnit[]
+  allocations Allocation[]
+
+  @@index([kind])
+}
+
+model EquipmentUnit {
+  id          String   @id
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  inUse       Boolean  @default(false)
+  reserved    Boolean  @default(false)
+  status      String   @default("Available")
+  reservedFor String?
+  patientId   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([equipmentId])
+  @@index([status])
+}
+
+model EmergencyResource {
+  id          String   @id
+  name        String
+  kind        String // RESUS | BAY | VENTILATOR | OT | TRAUMA_EQUIPMENT
+  total       Int      @default(0)
+  inUse       Int      @default(0)
+  reserved    Int      @default(0)
+  location    String?
+  status      String   @default("Available")
+  criticalFor String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  allocations Allocation[]
+}
+
+// ------------------------------------------------------------------ operating theatres
+
+model OperatingTheatre {
+  id                 String        @id // OT-01 …
+  name               String
+  kind               String        @default("GENERAL") // EMERGENCY | GENERAL | ELECTIVE | CARDIAC
+  status             TheatreStatus @default(AVAILABLE)
+  nextAvailableSlot  String?
+  nextAvailableMinutes Int?
+  notes              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  schedule OtSchedule[]
+}
+
+model OtSchedule {
+  id                String       @id @default(cuid())
+  theatreId         String
+  theatre           OperatingTheatre @relation(fields: [theatreId], references: [id], onDelete: Cascade)
+  patientId         String?
+  patient           Patient?     @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  patientLabel      String?
+  procedure         String
+  priority          Priority     @default(Medium)
+  status            OtSlotStatus @default(SCHEDULED)
+  start             String?
+  end               String?
+  startMinutes      Int?
+  endMinutes        Int?
+  surgeonId         String?
+  surgeon           Doctor?      @relation("OtSurgeon", fields: [surgeonId], references: [id], onDelete: SetNull)
+  surgeonName       String?
+  anaesthetist      String?
+  requiredEquipment String[]     @default([])
+  equipmentReady    Boolean      @default(false)
+  nurses            String[]     @default([])
+  conflict          Boolean      @default(false)
+  conflictDetail    String?
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([status])
+  @@index([startMinutes])
+}
+
+// ------------------------------------------------------------------ allocations & approvals
+
+model Allocation {
+  id            String           @id @default(cuid())
+  reference     String           @unique
+  type          AllocationType
+  patientId     String?
+  patient       Patient?         @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  bedId         String?
+  bed           Bed?             @relation(fields: [bedId], references: [id], onDelete: SetNull)
+  doctorId      String?
+  doctor        Doctor?          @relation(fields: [doctorId], references: [id], onDelete: SetNull)
+  nurseId       String?
+  nurse         Nurse?           @relation(fields: [nurseId], references: [id], onDelete: SetNull)
+  equipmentId   String?
+  equipment     Equipment?       @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  equipmentUnitId String?
+  emergencyResourceId String?
+  emergencyResource EmergencyResource? @relation(fields: [emergencyResourceId], references: [id], onDelete: SetNull)
+  theatreId     String?
+  quantity      Int              @default(1)
+  resourceLabel String?
+  status        AllocationStatus @default(PROPOSED)
+  reason        String?
+  allocatedById String?
+  allocatedBy   User?            @relation(fields: [allocatedById], references: [id], onDelete: SetNull)
+  approvalId    String?
+  approval      Approval?        @relation(fields: [approvalId], references: [id], onDelete: SetNull)
+  confirmedAt   DateTime?
+  rejectedAt    DateTime?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([patientId])
+}
+
+model Approval {
+  id                String         @id @default(cuid())
+  reference         String         @unique // APR-1042
+  title             String
+  subtitle          String?
+  priority          Priority       @default(Critical)
+  status            ApprovalStatus @default(PENDING_REVIEW)
+  summary           Json           @default("{}")
+  recommendationIds String[]       @default([])
+  conflictsRaised   Int            @default(0)
+  impact            Json           @default("[]")
+  optimizationId    String?
+  optimization      OptimizationRun? @relation(fields: [optimizationId], references: [id], onDelete: SetNull)
+  requestedById     String?
+  requestedBy       User?          @relation("ApprovalRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  requestedByName   String?
+  decidedById       String?
+  decidedBy         User?          @relation("ApprovalDecider", fields: [decidedById], references: [id], onDelete: SetNull)
+  decidedByName     String?
+  decidedAt         DateTime?
+  reason            String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  allocations Allocation[]
+
+  @@index([status])
+}
+
+// ------------------------------------------------------------------ optimization & simulation
+
+model OptimizationRun {
+  id            String   @id @default(cuid())
+  reference     String   @unique
+  requestedById String?
+  requestedBy   User?    @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  requestedByName String?
+  mode          String   @default("current")
+  status        String   @default("RECOMMENDATION_READY")
+  selections    Json     @default("{}")
+  impact        Json     @default("[]")
+  conflicts     Json     @default("[]")
+  pressure      Json     @default("{}")
+  analysisRows  Json     @default("[]")
+  generatedAt   DateTime @default(now())
+  createdAt     DateTime @default(now())
+
+  recommendations OptimizationRecommendation[]
+  approvals       Approval[]
+
+  @@index([generatedAt])
+}
+
+model OptimizationRecommendation {
+  id               String                @id @default(cuid())
+  reference        String // REC-ICU-01 …
+  runId            String
+  run              OptimizationRun       @relation(fields: [runId], references: [id], onDelete: Cascade)
+  resource         String
+  resourceCode     String
+  action           RecommendationAction
+  title            String
+  summary          String
+  detail           Json                  @default("[]")
+  highlight        String
+  quantity         Int                   @default(0)
+  requiresApproval Boolean               @default(true)
+  reason           String
+  score            Json                  @default("{}")
+  options          Json                  @default("[]")
+  status           String                @default("OPEN") // OPEN | REJECTED | APPLIED
+  rejectedReason   String?
+  rejectedBy       String?
+  rejectedAt       DateTime?
+  createdAt        DateTime              @default(now())
+
+  @@unique([runId, reference])
+  @@index([resourceCode])
+}
+
+model SurgeSimulation {
+  id           String           @id @default(cuid())
+  reference    String           @unique
+  status       SimulationStatus @default(NORMAL)
+  active       Boolean          @default(true)
+  scenario     String           @default("MASS_CASUALTY_INTAKE")
+  patientCount Int              @default(20)
+  triggeredById String?
+  triggeredBy  User?            @relation(fields: [triggeredById], references: [id], onDelete: SetNull)
+  before       Json             @default("{}")
+  after        Json             @default("{}")
+  changes      Json             @default("{}")
+  conflicts    Json             @default("[]")
+  createdAt    DateTime         @default(now())
+  revertedAt   DateTime?
+  patients     Patient[]
+
+  @@index([active])
+}
+
+/// Clinical duty tasks (nurse/doctor shift checklists). They belong to the
+/// clinical dashboards only — the command center never sees individual tasks.
+model ClinicalTask {
+  id         String   @id @default(cuid())
+  reference  String   @unique // TSK-01 …
+  title      String
+  detail     String
+  category   String
+  priority   Priority @default(Medium)
+  dueTime    String
+  department String?
+  patientNumber String?
+  status     String   @default("Open") // Open | Completed
+  note       String?
+  completedAt DateTime?
+  completedBy String?
+  assignedDoctorId String?
+  assignedDoctor   Doctor? @relation(fields: [assignedDoctorId], references: [id], onDelete: SetNull)
+  assignedNurseId  String?
+  assignedNurse   Nurse?  @relation(fields: [assignedNurseId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([status])
+}
+
+// ------------------------------------------------------------------ alerts, notifications, audit
+
+model Alert {
+  id               String        @id @default(cuid())
+  reference        String        @unique
+  type             AlertType
+  severity         AlertSeverity @default(OPERATIONAL)
+  category         String
+  title            String
+  description      String
+  resource         String?
+  affectedResource String?
+  actionLabel      String?
+  actionTo         String?
+  source           String        @default("Constraint engine")
+  status           AlertStatus   @default(ACTIVE)
+  patientId        String?
+  patient          Patient?      @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  acknowledgedAt   DateTime?
+  resolvedAt       DateTime?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([category])
+}
+
+/// Notifications are persisted per recipient user, so staff who are not at a
+/// screen still receive them on their next sign-in (section 35).
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  body      String
+  type      AlertType @default(Operational)
+  category  String   @default("Operations")
+  patientId String?
+  patient   Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  actionLabel String?
+  actionTo  String?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId, readAt])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  actorName String?
+  actorRole String?
+  action    String
+  entity    String?
+  entityId  String?
+  before    Json?
+  after     Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([action])
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+/// One HE-02 AI advisory/inference run. Stored so that the operational advice a
+/// command centre acted on can be reconstructed afterwards (§34).
+model AiRun {
+  id          String   @id @default(cuid())
+  reference   String   @unique
+  kind        String
+  requestedBy String?
+  actorName   String?
+  actorRole   String?
+  status      String   @default("COMPLETED")
+  durationMs  Int?
+  aiServiceUp Boolean  @default(false)
+  payload     Json     @default("{}")
+  summary     Json     @default("{}")
+  findings    Json     @default("[]")
+  createdAt   DateTime @default(now())
+
+  predictions AiPrediction[]
+
+  @@index([kind, createdAt])
+  @@index([createdAt])
+}
+
+/// One model prediction inside a run: who produced it, from which version, for
+/// which target, and whether it came from a trained model or a rule fallback.
+model AiPrediction {
+  id           String   @id @default(cuid())
+  reference    String   @unique
+  runId        String?
+  run          AiRun?   @relation(fields: [runId], references: [id], onDelete: SetNull)
+  modelName    String
+  modelVersion String?
+  algorithm    String?
+  target       String
+  horizon      String?
+  source       String
+  value        Float?
+  valueText    String?
+  probability  Json?
+  context      Json     @default("{}")
+  createdAt    DateTime @default(now())
+
+  @@index([modelName, createdAt])
+  @@index([target, createdAt])
+  @@index([runId])
+}
+
+// ------------------------------------------------------------------ arrivals
+/// Emergency arrivals, one row per patient registration at the door.
+///
+/// MediCore's demand forecasts need an arrival *flow*, not just the current
+/// waiting list, so every registration is logged here with its arrival time and
+/// triage. The rolling arrival counts the models consume are read from this
+/// table, which makes them a measurement of what actually happened rather than
+/// an estimate.
+model ArrivalLog {
+  id            String   @id @default(cuid())
+  patientId     String?
+  patient       Patient? @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  patientNumber String?
+  source        String   @default("AMBULANCE") // AMBULANCE | WALK_IN | REFERRAL | TRANSFER
+  priority      Priority @default(Medium)
+  department    String?
+  triage        String   @default("ESI 3")
+  arrivedAt     DateTime @default(now())
+  recordedById  String?
+  createdAt     DateTime @default(now())
+
+  @@index([arrivedAt])
+  @@index([source])
+}

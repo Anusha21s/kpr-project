@@ -1,0 +1,165 @@
+{
+  "model_name": "doctor_workload_xgboost_load_2h",
+  "model_key": "load_2h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "doctor_workload",
+  "target": "target_load_2h",
+  "features": [
+    "current_load",
+    "max_operational_load",
+    "scheduled_procedures",
+    "department_pressure",
+    "expected_arrivals_1h",
+    "current_queue",
+    "icu_occupancy",
+    "bed_occupancy",
+    "hour_of_day",
+    "is_weekend",
+    "specialty_match",
+    "duty_status_on",
+    "availability_free"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:40.136764+00:00",
+  "training_rows": 7811,
+  "validation_rows": 1675,
+  "test_rows": 1674,
+  "baseline_column": "current_load",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 0.4976,
+      "rmse": 0.627,
+      "r2": 0.9013,
+      "mape": 7.594,
+      "bias": -0.0146,
+      "samples": 1675,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -1.0032243133544918,
+        "upper_offset": 1.0412457023620607,
+        "residual_std": 0.6268334203072369
+      }
+    },
+    "test": {
+      "mae": 0.4921,
+      "rmse": 0.6108,
+      "r2": 0.8878,
+      "mape": 7.343,
+      "bias": 0.031,
+      "samples": 1674,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -1.0018049877166744,
+        "upper_offset": 1.0397569343566888,
+        "residual_std": 0.6100351607839334
+      },
+      "skill_vs_baseline": 0.7069,
+      "skill_baseline": "persistence (current_load)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 1.7075,
+        "rmse": 2.151,
+        "r2": -0.1618,
+        "mape": 22.241,
+        "bias": -1.5659,
+        "samples": 1675,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -4.378900000000001,
+          "upper_offset": 0.5624999999999997,
+          "residual_std": 1.4747262857166272
+        }
+      },
+      "test": {
+        "mae": 1.6792,
+        "rmse": 2.0556,
+        "r2": -0.2702,
+        "mape": 22.075,
+        "bias": -1.5674,
+        "samples": 1674,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -3.8558000000000003,
+          "upper_offset": 0.4558999999999984,
+          "residual_std": 1.329915042884392
+        }
+      },
+      "column": "current_load"
+    },
+    "best_iteration": 140,
+    "trees": 171,
+    "feature_importance": [
+      {
+        "feature": "expected_arrivals_1h",
+        "label": "expected arrivals 1h",
+        "share": 0.319
+      },
+      {
+        "feature": "current_load",
+        "label": "current assigned patients",
+        "share": 0.2811
+      },
+      {
+        "feature": "current_queue",
+        "label": "current emergency queue",
+        "share": 0.1597
+      },
+      {
+        "feature": "department_pressure",
+        "label": "department pressure",
+        "share": 0.1313
+      },
+      {
+        "feature": "icu_occupancy",
+        "label": "ICU occupancy",
+        "share": 0.0525
+      },
+      {
+        "feature": "scheduled_procedures",
+        "label": "scheduled procedures this shift",
+        "share": 0.0311
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0053
+      },
+      {
+        "feature": "bed_occupancy",
+        "label": "general bed occupancy",
+        "share": 0.005
+      },
+      {
+        "feature": "duty_status_on",
+        "label": "on duty",
+        "share": 0.0045
+      },
+      {
+        "feature": "is_weekend",
+        "label": "weekend",
+        "share": 0.0039
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/doctor_workload/load_2h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Forecasts expected assigned load in the next 2 hours for one doctor. Configured workload limits in the operational database remain binding."
+}

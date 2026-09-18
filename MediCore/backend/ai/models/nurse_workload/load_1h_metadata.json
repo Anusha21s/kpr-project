@@ -1,0 +1,163 @@
+{
+  "model_name": "nurse_workload_xgboost_load_1h",
+  "model_key": "load_1h",
+  "model_version": "1.0.0",
+  "algorithm": "XGBoost Regressor",
+  "family": "nurse_workload",
+  "target": "target_load_1h",
+  "features": [
+    "current_load",
+    "max_operational_load",
+    "incoming_demand_1h",
+    "icu_demand",
+    "emergency_demand",
+    "department_pressure",
+    "bed_occupancy",
+    "hour_of_day",
+    "is_weekend",
+    "duty_status_on",
+    "availability_free"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:22:40.528570+00:00",
+  "training_rows": 20916,
+  "validation_rows": 4482,
+  "test_rows": 4482,
+  "baseline_column": "current_load",
+  "params": {
+    "objective": "reg:squarederror",
+    "eta": 0.06,
+    "max_depth": 5,
+    "subsample": 0.85,
+    "colsample_bytree": 0.85,
+    "min_child_weight": 3,
+    "reg_lambda": 1.5,
+    "seed": 20260918,
+    "nthread": 2
+  },
+  "metrics": {
+    "validation": {
+      "mae": 0.2815,
+      "rmse": 0.3715,
+      "r2": 0.9245,
+      "mape": 6.474,
+      "bias": -0.0127,
+      "samples": 4482,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -0.591128296852112,
+        "upper_offset": 0.58100588684082,
+        "residual_std": 0.3712360916315651
+      }
+    },
+    "test": {
+      "mae": 0.2605,
+      "rmse": 0.3301,
+      "r2": 0.9153,
+      "mape": 6.14,
+      "bias": 0.017,
+      "samples": 4482,
+      "prediction_interval": {
+        "method": "empirical_residual_quantile_on_holdout",
+        "confidence": 0.9,
+        "lower_offset": -0.5144602409362791,
+        "upper_offset": 0.570673460197449,
+        "residual_std": 0.32963925932460153
+      },
+      "skill_vs_baseline": 0.5734,
+      "skill_baseline": "persistence (current_load)"
+    },
+    "baseline": {
+      "validation": {
+        "mae": 0.6926,
+        "rmse": 1.0311,
+        "r2": 0.418,
+        "mape": 14.645,
+        "bias": -0.467,
+        "samples": 4482,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -2.3891000000000004,
+          "upper_offset": 0.6440000000000001,
+          "residual_std": 0.9192170214295459
+        }
+      },
+      "test": {
+        "mae": 0.6107,
+        "rmse": 0.8056,
+        "r2": 0.4953,
+        "mape": 13.733,
+        "bias": -0.4076,
+        "samples": 4482,
+        "prediction_interval": {
+          "method": "empirical_residual_quantile_on_holdout",
+          "confidence": 0.9,
+          "lower_offset": -1.6619,
+          "upper_offset": 0.66295,
+          "residual_std": 0.6948776696094193
+        }
+      },
+      "column": "current_load"
+    },
+    "best_iteration": 219,
+    "trees": 250,
+    "feature_importance": [
+      {
+        "feature": "current_load",
+        "label": "current assigned patients",
+        "share": 0.479
+      },
+      {
+        "feature": "emergency_demand",
+        "label": "emergency demand",
+        "share": 0.3522
+      },
+      {
+        "feature": "department_pressure",
+        "label": "department pressure",
+        "share": 0.0491
+      },
+      {
+        "feature": "incoming_demand_1h",
+        "label": "incoming demand 1h",
+        "share": 0.0464
+      },
+      {
+        "feature": "bed_occupancy",
+        "label": "general bed occupancy",
+        "share": 0.0327
+      },
+      {
+        "feature": "icu_demand",
+        "label": "icu demand",
+        "share": 0.0209
+      },
+      {
+        "feature": "hour_of_day",
+        "label": "hour of day",
+        "share": 0.0094
+      },
+      {
+        "feature": "is_weekend",
+        "label": "weekend",
+        "share": 0.0083
+      },
+      {
+        "feature": "duty_status_on",
+        "label": "on duty",
+        "share": 0.0011
+      },
+      {
+        "feature": "availability_free",
+        "label": "available (not in a procedure)",
+        "share": 0.001
+      }
+    ]
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/nurse_workload/load_1h_v1.0.0.json",
+  "synthetic_data": true,
+  "notes": "Forecasts expected assigned load in the next hour for one nurse. Configured workload limits in the operational database remain binding."
+}

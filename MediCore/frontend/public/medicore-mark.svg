@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="MediCore">
+  <rect width="64" height="64" rx="14" fill="#1976D2" />
+  <path d="M27 12h10v15h15v10H37v15H27V37H12V27h15z" fill="#FFFFFF" opacity="0.96" />
+  <path
+    d="M8 46h10l4-8 5 14 5-20 5 28 4-14h15"
+    fill="none"
+    stroke="#009688"
+    stroke-width="3.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

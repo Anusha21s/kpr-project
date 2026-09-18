@@ -1,0 +1,84 @@
+{
+  "model_name": "surge_isolation_forest",
+  "model_key": "surge_detector",
+  "model_version": "1.0.0",
+  "algorithm": "Isolation Forest",
+  "family": "surge_detection",
+  "target": "operational anomaly flag",
+  "features": [
+    "arrivals_15m",
+    "arrivals_1h",
+    "arrivals_3h",
+    "current_queue",
+    "critical_queue",
+    "icu_occupancy",
+    "bed_occupancy",
+    "doctor_utilisation",
+    "nurse_utilisation",
+    "equipment_utilisation",
+    "ot_utilisation",
+    "ot_backlog",
+    "emergency_resource_pressure"
+  ],
+  "feature_version": "features_v2",
+  "dataset_version": "synthetic_hospital_ops_v1",
+  "training_date": "2026-09-18T13:37:32.534658+00:00",
+  "training_rows": 3024,
+  "validation_rows": 648,
+  "test_rows": 648,
+  "metrics": {
+    "validation": {
+      "precision": 0.243,
+      "recall": 0.8125,
+      "f1": 0.3741,
+      "false_positive_rate": 0.1315,
+      "true_positive": 26,
+      "false_positive": 81,
+      "false_negative": 6,
+      "true_negative": 535,
+      "samples": 648
+    },
+    "test": {
+      "precision": 0.4366,
+      "recall": 0.6889,
+      "f1": 0.5345,
+      "false_positive_rate": 0.0663,
+      "true_positive": 31,
+      "false_positive": 40,
+      "false_negative": 14,
+      "true_negative": 563,
+      "samples": 648
+    },
+    "validation_detection_delay": {
+      "surge_events": 2,
+      "detected": 2,
+      "missed": 0,
+      "mean_delay_steps": 1.5,
+      "mean_delay_minutes": 22.5,
+      "max_delay_steps": 3
+    },
+    "test_detection_delay": {
+      "surge_events": 2,
+      "detected": 2,
+      "missed": 0,
+      "mean_delay_steps": 0.5,
+      "mean_delay_minutes": 7.5,
+      "max_delay_steps": 1
+    },
+    "score_offset": 7.237049501340742e-18,
+    "contamination": 0.06,
+    "score_range": {
+      "min": -0.13359938798928106,
+      "max": 0.17499572851922585
+    }
+  },
+  "artifact_path": "/home/user/MediCore/backend/ai/models/surge_detection/surge_detector_v1.0.0.joblib",
+  "synthetic_data": true,
+  "severity_bands": {
+    "NORMAL": "no unusual operational pattern",
+    "ELEVATED": "early departure from normal, monitor",
+    "HIGH PRESSURE": "sustained unusual demand, review staffing and capacity",
+    "CRITICAL OPERATIONAL PRESSURE": "operational pressure at the top of the policy band \u2014 escalate for human review"
+  },
+  "notes": "Detects unusual operational patterns only. It does not diagnose patients and never delays treatment; clinical workflows continue while the detector runs."
+}
